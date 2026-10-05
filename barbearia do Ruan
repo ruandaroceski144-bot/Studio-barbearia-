@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>SB Barber — Agendamentos</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f4f4f4;
+      color: #111;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .app {
+      max-width: 500px;
+      min-height: 100vh;
+      margin: auto;
+      background: #fff;
+      position: relative;
+      padding-bottom: 85px;
+      box-shadow: 0 0 30px rgba(0,0,0,.08);
+    }
+
+    /* TOPO */
+    header {
+      background: #111;
+      color: white;
+      padding: 25px 20px;
+      border-radius: 0 0 25px 25px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .profile {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: white;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    header p {
+      margin-top: 20px;
+      color: #bbb;
+      font-size: 14px;
+    }
+
+    header h1 {
+      margin-top: 6px;
+      font-size: 25px;
+    }
+
+    /* CONTEÚDO */
+    main {
+      padding: 20px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .section-title h2 {
+      font-size: 19px;
+    }
+
+    .section-title span {
+      color: #777;
+      font-size: 13px;
+    }
+
+    /* CARD DESTAQUE */
+    .banner {
+      background: linear-gradient(135deg, #171717, #333);
+      color: white;
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 25px;
+    }
+
+    .banner small {
+      color: #bbb;
+    }
+
+    .banner h2 {
+      margin: 8px 0;
+      font-size: 23px;
+    }
+
+    .banner button {
+      margin-top: 12px;
+      background: white;
+      color: #111;
+      border: 0;
+      padding: 11px 17px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* SERVIÇOS */
+    .services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .service {
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: .2s;
+      background: white;
+    }
+
+    .service:hover {
+      transform: translateY(-2px);
+      border-color: #111;
+    }
+
+    .service-icon {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .service h3 {
+      font-size: 15px;
+    }
+
+    .service p {
+      color: #777;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .price {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* BARBEIROS */
+    .barbers {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+      margin-bottom: 25px;
+    }
+
+    .barber {
+      min-width: 120px;
+      border: 1px solid #eee;
+      padding: 15px;
+      border-radius: 16px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .barber-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #222;
+      color: white;
+      margin: auto auto 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .barber p {
+      font-size: 12px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    /* AGENDAMENTO */
+    .booking {
+      display: none;
+    }
+
+    .booking.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      outline: none;
+      background: white;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #111;
+    }
+
+    .times {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .time {
+      padding: 12px 5px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .time.selected {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: 0;
+      padding: 15px;
+      border-radius: 13px;
+      background: #111;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* AGENDAMENTOS */
+    .appointment {
+      background: #f7f7f7;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-left: 4px solid #111;
+    }
+
+    .appointment strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .appointment span {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* ASSINATURA */
+    .subscription {
+      background: #111;
+      color: white;
+      padding: 22px;
+      border-radius: 20px;
+      margin-top: 25px;
+    }
+
+    .subscription h2 {
+      margin-bottom: 8px;
+    }
+
+    .subscription p {
+      color: #bbb;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .subscription button {
+      margin-top: 15px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 10px;
+      background: white;
+      color: #111;
+      font-weight: bold;
+    }
+
+    /* IA */
+    .ai {
+      position: fixed;
+      right: 20px;
+      bottom: 90px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: none;
+      background: #111;
+      color: white;
+      font-size: 23px;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0,0,0,.25);
+      z-index: 10;
+    }
+
+    .chat {
+      display: none;
+      position: fixed;
+      right: 20px;
+      bottom: 155px;
+      width: calc(100% - 40px);
+      max-width: 360px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 5px 30px rgba(0,0,0,.2);
+      overflow: hidden;
+      z-index: 20;
+    }
+
+    .chat.active {
+      display: block;
+    }
+
+    .chat-header {
+      background: #111;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+    }
+
+    .chat-body {
+      padding: 15px;
+      height: 230px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    .message {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #eee;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: 0;
+      padding: 12px;
+      outline: none;
+    }
+
+    .chat-input button {
+      border: 0;
+      background: #111;
+      color: white;
+      padding: 0 15px;
+    }
+
+    /* MENU */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 500px;
+      height: 70px;
+      background: white;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 9;
+    }
+
+    nav button {
+      border: 0;
+      background: none;
+      color: #777;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    nav button span {
+      display: block;
+      font-size: 21px;
+      margin-bottom: 3px;
+    }
+
+    nav button.active {
+      color: #111;
+      font-weight: bold;
+    }
+
+    /* DESKTOP */
+    @media (min-width: 700px) {
+      body {
+        padding: 30px 0;
+      }
+
+      .app {
+        border-radius: 25px;
+        overflow: hidden;
+      }
+
+      nav {
+        border-radius: 0 0 25px 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- CABEÇALHO -->
+  <header>
+    <div class="top">
+      <div class="logo">SB</div>
+      <div class="profile">R</div>
+    </div>
+
+    <p>Olá, seja bem-vindo 👋</p>
+    <h1>Agende seu horário</h1>
+  </header>
+
+  <main>
+
+    <!-- INÍCIO -->
+    <section id="home">
+
+      <div class="banner">
+        <small>OFERTA ESPECIAL</small>
+        <h2>Seu próximo corte começa aqui.</h2>
+        <p>Escolha o serviço, barbeiro e horário.</p>
+        <button onclick="mostrarAgendamento()">Agendar agora</button>
+      </div>
+
+      <!-- SERVIÇOS -->
+      <div class="section-title">
+        <h2>Serviços</h2>
+        <span>Escolha um</span>
+      </div>
+
+      <div class="services">
+
+        <div class="service" onclick="selecionarServico('Corte de cabelo', 40)">
+          <div class="service-icon">✂️</div>
+          <h3>Corte de cabelo</h3>
+          <p>Degradê, social e outros</p>
+          <div class="price">R$ 40,00</div>
+        </div>
+
+        <div class="service" onclick="selecionarServico('Cabelo + Barba', 70)">
+          <div class="service-icon">💈</div>
+          <h3>Cabelo + Barba</h3>
+          <p>Corte completo</p>
+          <div class="price">R$ 70,00</div>
+        </div>
+
+        <div class="service" onclick="selecionarServico('Barba', 30)">
+          <div class="service-icon">🧔</div>
+          <h3>Barba</h3>
+          <p>Acabamento profissional</p>
+          <div class="price">R$ 30,00</div>
+        </div>
+
+        <div class="service" onclick="selecionarServico('Sobrancelha', 10)">
+          <div class="service-icon">✨</div>
+          <h3>Sobrancelha</h3>
+          <p>Acabamento</p>
+          <div class="price">R$ 10,00</div>
+        </div>
+
+      </div>
+
+      <!-- BARBEIROS -->
+      <div class="section-title">
+        <h2>Barbeiros</h2>
+      </div>
+
+      <div class="barbers">
+
+        <div class="barber" onclick="selecionarBarbeiro('Barbeiro 1')">
+          <div class="barber-avatar">B1</div>
+          <strong>Barbeiro 1</strong>
+          <p>Especialista</p>
+        </div>
+
+        <div class="barber" onclick="selecionarBarbeiro('Barbeiro 2')">
+          <div class="barber-avatar">B2</div>
+          <strong>Barbeiro 2</strong>
+          <p>Especialista</p>
+        </div>
+
+        <div class="barber" onclick="selecionarBarbeiro('Barbeiro 3')">
+          <div class="barber-avatar">B3</div>
+          <strong>Barbeiro 3</strong>
+          <p>Especialista</p>
+        </div>
+
+      </div>
+
+      <!-- ASSINATURA -->
+      <div class="subscription">
+        <h2>Plano mensal ⭐</h2>
+        <p>
+          Tenha benefícios exclusivos, prioridade nos agendamentos
+          e condições especiais.
+        </p>
+        <button onclick="assinar()">Conhecer plano</button>
+      </div>
+
+    </section>
+
+
+    <!-- AGENDAMENTO -->
+    <section id="booking" class="booking">
+
+      <div class="section-title">
+        <h2>Novo agendamento</h2>
+        <span>Passo 1</span>
+      </div>
+
+      <div class="form-group">
+        <label>Serviço</label>
+
+        <select id="serviceSelect">
+          <option value="">Selecione o serviço</option>
+          <option value="Corte de cabelo">Corte de cabelo — R$ 40</option>
+          <option value="Cabelo + Barba">Cabelo + Barba — R$ 70</option>
+          <option value="Barba">Barba — R$ 30</option>
+          <option value="Sobrancelha">Sobrancelha — R$ 10</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Barbeiro</label>
+
+        <select id="barberSelect">
+          <option value="">Selecione o barbeiro</option>
+          <option>Barbeiro 1</option>
+          <option>Barbeiro 2</option>
+          <option>Barbeiro 3</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="date">
+      </div>
+
+      <div class="form-group">
+        <label>Horário</label>
+
+        <div class="times">
+
+          <button class="time" onclick="selecionarHorario(this)">08:00</button>
+          <button class="time" onclick="selecionarHorario(this)">09:00</button>
+          <button class="time" onclick="selecionarHorario(this)">10:00</button>
+
+          <button class="time" onclick="selecionarHorario(this)">13:00</button>
+          <button class="time" onclick="selecionarHorario(this)">14:00</button>
+          <button class="time" onclick="selecionarHorario(this)">15:00</button>
+
+          <button class="time" onclick="selecionarHorario(this)">16:00</button>
+          <button class="time" onclick="selecionarHorario(this)">17:00</button>
+          <button class="time" onclick="selecionarHorario(this)">18:00</button>
+
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Seu nome</label>
+        <input type="text" id="clientName" placeholder="Digite seu nome">
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp</label>
+        <input type="tel" id="phone" placeholder="(00) 00000-0000">
+      </div>
+
+      <button class="primary-btn" onclick="confirmarAgendamento()">
+        Confirmar agendamento
+      </button>
+
+      <button
+        class="primary-btn"
+        style="background:#eee;color:#111"
+        onclick="voltarInicio()">
+        Voltar
+      </button>
+
+    </section>
+
+
+    <!-- MEUS HORÁRIOS -->
+    <section id="appointments" style="display:none">
+
+      <div class="section-title">
+        <h2>Meus horários</h2>
+      </div>
+
+      <div id="appointmentList">
+        <p style="color:#777;font-size:14px">
+          Você ainda não possui agendamentos.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- CHAT IA -->
+<button class="ai" onclick="toggleChat()">🤖</button>
+
+<div class="chat" id="chat">
+
+  <div class="chat-header">
+    Assistente SB 🤖
+  </div>
+
+  <div class="chat-body" id="chatBody">
+
+    <div class="message">
+      Olá! 👋 Sou o assistente da barbearia.
+      Como posso ajudar?
+    </div>
+
+  </div>
+
+  <div class="chat-input">
+
+    <input
+      type="text"
+      id="chatInput"
+      placeholder="Digite sua pergunta..."
+      onkeydown="if(event.key==='Enter') enviarMensagem()">
+
+    <button onclick="enviarMensagem()">➤</button>
+
+  </div>
+
+</div>
+
+
+<!-- MENU INFERIOR -->
+<nav>
+
+  <button class="active" onclick="irPara('home', this)">
+    <span>⌂</span>
+    Início
+  </button>
+
+  <button onclick="mostrarAgendamento()">
+    <span>＋</span>
+    Agendar
+  </button>
+
+  <button onclick="irPara('appointments', this)">
+    <span>📅</span>
+    Horários
+  </button>
+
+  <button onclick="toggleChat()">
+    <span>🤖</span>
+    Assistente
+  </button>
+
+</nav>
+
+
+<script>
+
+  let servicoSelecionado = "";
+  let precoSelecionado = 0;
+  let barbeiroSelecionado = "";
+  let horarioSelecionado = "";
+
+  let agendamentos =
+    JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+
+  /* SERVIÇO */
+
+  function selecionarServico(nome, preco) {
+
+    servicoSelecionado = nome;
+    precoSelecionado = preco;
+
+    document.getElementById("serviceSelect").value = nome;
+
+    mostrarAgendamento();
+  }
+
+
+  /* BARBEIRO */
+
+  function selecionarBarbeiro(nome) {
+
+    barbeiroSelecionado = nome;
+
+    document.getElementById("barberSelect").value = nome;
+
+    mostrarAgendamento();
+  }
+
+
+  /* HORÁRIO */
+
+  function selecionarHorario(botao) {
+
+    document
+      .querySelectorAll(".time")
+      .forEach(btn => btn.classList.remove("selected"));
+
+    botao.classList.add("selected");
+
+    horarioSelecionado = botao.innerText;
+  }
+
+
+  /* ABRIR AGENDAMENTO */
+
+  function mostrarAgendamento() {
+
+    document.getElementById("home").style.display = "none";
+    document.getElementById("appointments").style.display = "none";
+
+    document.getElementById("booking")
+      .classList.add("active");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+
+  /* VOLTAR */
+
+  function voltarInicio() {
+
+    document.getElementById("booking")
+      .classList.remove("active");
+
+    document.getElementById("home").style.display = "block";
+
+  }
+
+
+  /* CONFIRMAR */
+
+  function confirmarAgendamento() {
+
+    const servico =
+      document.getElementById("serviceSelect").value;
+
+    const barbeiro =
+      document.getElementById("barberSelect").value;
+
+    const data =
+      document.getElementById("date").value;
+
+    const nome =
+      document.getElementById("clientName").value;
+
+    const telefone =
+      document.getElementById("phone").value;
+
+
+    if (!servico ||
+        !barbeiro ||
+        !data ||
+        !horarioSelecionado ||
+        !nome ||
+        !telefone) {
+
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+
+    const novoAgendamento = {
+
+      id: Date.now(),
+
+      servico: servico,
+
+      barbeiro: barbeiro,
+
+      data: data,
+
+      horario: horarioSelecionado,
+
+      nome: nome,
+
+      telefone: telefone
+
+    };
+
+
+    agendamentos.push(novoAgendamento);
+
+    localStorage.setItem(
+      "agendamentos",
+      JSON.stringify(agendamentos)
+    );
+
+
+    alert(
+      "Agendamento confirmado! 🎉\n\n" +
+      "Serviço: " + servico +
+      "\nBarbeiro: " + barbeiro +
+      "\nData: " + data +
+      "\nHorário: " + horarioSelecionado
+    );
+
+
+    carregarAgendamentos();
+
+    irPara("appointments");
+
+  }
+
+
+  /* LISTA DE AGENDAMENTOS */
+
+  function carregarAgendamentos() {
+
+    const lista =
+      document.getElementById("appointmentList");
+
+    if (agendamentos.length === 0) {
+
+      lista.innerHTML =
+        '<p style="color:#777;font-size:14px">' +
+        'Você ainda não possui agendamentos.' +
+        '</p>';
+
+      return;
+    }
+
+
+    lista.innerHTML = "";
+
+
+    agendamentos.forEach(item => {
+
+      const div =
+        document.createElement("div");
+
+      div.className = "appointment";
+
+      div.innerHTML = `
+
+        <strong>
+          ${item.servico}
+        </strong>
+
+        <span>
+          📅 ${item.data}
+          <br>
+          ⏰ ${item.horario}
+          <br>
+          💈 ${item.barbeiro}
+        </span>
+
+      `;
+
+      lista.appendChild(div);
+
+    });
+
+  }
+
+
+  /* NAVEGAÇÃO */
+
+  function irPara(pagina, botao) {
+
+    document.getElementById("home").style.display = "none";
+
+    document.getElementById("booking")
+      .classList.remove("active");
+
+    document.getElementById("appointments")
+      .style.display = "none";
+
+
+    if (pagina === "home") {
+
+      document.getElementById("home").style.display = "block";
+
+    }
+
+
+    if (pagina === "appointments") {
+
+      document.getElementById("appointments")
+        .style.display = "block";
+
+      carregarAgendamentos();
+
+    }
+
+
+    document
+      .querySelectorAll("nav button")
+      .forEach(btn =>
+        btn.classList.remove("active")
+      );
+
+
+    if (botao) {
+      botao.classList.add("active");
+    }
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+
+
+  /* CHAT */
+
+  function toggleChat() {
+
+    document
+      .getElementById("chat")
+      .classList.toggle("active");
+
+  }
+
+
+  /* ASSISTENTE */
+
+  function enviarMensagem() {
+
+    const input =
+      document.getElementById("chatInput");
+
+    const texto =
+      input.value.trim();
+
+    if (!texto) return;
+
+
+    const body =
+      document.getElementById("chatBody");
+
+
+    body.innerHTML +=
+      `<div class="message">
+        ${texto}
+      </div>`;
+
+
+    input.value = "";
+
+
+    let resposta =
+      "Posso ajudar com agendamentos, serviços, horários e informações da barbearia.";
+
+
+    const pergunta =
+      texto.toLowerCase();
+
+
+    if (pergunta.includes("preço") ||
+        pergunta.includes("valor")) {
+
+      resposta =
+        "O corte custa R$ 40, cabelo + barba R$ 70, barba R$ 30 e sobrancelha R$ 10.";
+
+    }
+
+
+    else if (pergunta.includes("horário") ||
+             pergunta.includes("horarios")) {
+
+      resposta =
+        "Temos horários disponíveis das 08:00 às 18:00. Escolha um horário na tela de agendamento.";
+
+    }
+
+
+    else if (pergunta.includes("agendar")) {
+
+      resposta =
+        "Claro! Clique em 'Agendar' no menu inferior e escolha o serviço, barbeiro, data e horário.";
+
+    }
+
+
+    else if (pergunta.includes("barbeiro")) {
+
+      resposta =
+        "Você pode escolher entre os barbeiros disponíveis na tela de agendamento.";
+
+    }
+
+
+    setTimeout(() => {
+
+      body.innerHTML +=
+        `<div class="message">
+          ${resposta}
+        </div>`;
+
+      body.scrollTop = body.scrollHeight;
+
+    }, 500);
+
+  }
+
+
+  /* ASSINATURA */
+
+  function assinar() {
+
+    alert(
+      "Plano mensal\n\n" +
+      "Em breve você poderá escolher o plano e realizar o pagamento."
+    );
+
+  }
+
+
+  /* DATA MÍNIMA */
+
+  const hoje =
+    new Date().toISOString().split("T")[0];
+
+  document.getElementById("date").min = hoje;
+
+
+  /* INICIALIZA */
+
+  carregarAgendamentos();
+
+</script>
+
+</body>
+</html>
